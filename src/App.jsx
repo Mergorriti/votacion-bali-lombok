@@ -24,6 +24,14 @@ function getStoredVoter() {
   return window.localStorage.getItem("bali-voter") || voters[0];
 }
 
+function getStoredZone() {
+  return window.localStorage.getItem("bali-zone") || zones[0].id;
+}
+
+function getStoredView() {
+  return window.localStorage.getItem("bali-view") || "home";
+}
+
 function buildResults(votes, zoneId, planId) {
   const planVotes = votes.filter(
     (vote) => vote.day_id === zoneId && vote.plan_id === planId,
@@ -76,8 +84,8 @@ function groupPlansByZone(plans) {
 
 function App() {
   const [selectedVoter, setSelectedVoter] = useState(getStoredVoter);
-  const [activeZoneId, setActiveZoneId] = useState(zones[0].id);
-  const [activeView, setActiveView] = useState("home");
+  const [activeZoneId, setActiveZoneId] = useState(getStoredZone);
+  const [activeView, setActiveView] = useState(getStoredView);
   const [votes, setVotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [savingKey, setSavingKey] = useState("");
@@ -124,6 +132,14 @@ function App() {
   }, [selectedVoter]);
 
   useEffect(() => {
+    window.localStorage.setItem("bali-zone", activeZoneId);
+  }, [activeZoneId]);
+
+  useEffect(() => {
+    window.localStorage.setItem("bali-view", activeView);
+  }, [activeView]);
+
+  useEffect(() => {
     if (!hasSupabaseConfig) {
       setLoading(false);
       setMessage("Falta conectar Supabase. Revisa el archivo .env.local.");
@@ -132,8 +148,10 @@ function App() {
 
     let ignore = false;
 
-    async function loadVotes() {
-      setLoading(true);
+    async function loadVotes({ showLoading = false } = {}) {
+      if (showLoading) {
+        setLoading(true);
+      }
       const { data, error } = await supabase
         .from("trip_votes")
         .select("*")
@@ -148,10 +166,12 @@ function App() {
         setMessage("");
       }
 
-      setLoading(false);
+      if (showLoading) {
+        setLoading(false);
+      }
     }
 
-    loadVotes();
+    loadVotes({ showLoading: true });
 
     const channel = supabase
       .channel("trip_votes_changes")
@@ -176,6 +196,7 @@ function App() {
 
     const existingVote = getOwnVote(zoneId, planId);
     const voteKey = `${selectedVoter}-${zoneId}-${planId}`;
+    const scrollPosition = window.scrollY;
     setSavingKey(voteKey);
     setMessage("");
 
@@ -208,6 +229,7 @@ function App() {
     }
 
     setSavingKey("");
+    requestAnimationFrame(() => window.scrollTo({ top: scrollPosition }));
   }
 
   async function toggleMustDo(zoneId, planId) {
@@ -219,6 +241,7 @@ function App() {
     const existingVote = getOwnVote(zoneId, planId);
     const nextMustDo = !Boolean(existingVote?.must_do);
     const voteKey = `${selectedVoter}-${zoneId}-${planId}-must`;
+    const scrollPosition = window.scrollY;
     setSavingKey(voteKey);
     setMessage("");
 
@@ -251,6 +274,7 @@ function App() {
     }
 
     setSavingKey("");
+    requestAnimationFrame(() => window.scrollTo({ top: scrollPosition }));
   }
 
   function getOwnVote(zoneId, planId) {
