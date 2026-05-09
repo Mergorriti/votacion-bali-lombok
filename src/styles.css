@@ -285,6 +285,17 @@ h1 {
   background: #ffedd5;
 }
 
+.moment-tag.group {
+  color: #ffffff;
+  background: #0f766e;
+}
+
+.moment-tag.individual {
+  margin: 6px 0 0 8px;
+  color: #7c2d12;
+  background: #ffedd5;
+}
+
 .tag-row {
   display: flex;
   flex-wrap: wrap;
@@ -579,6 +590,99 @@ h1 {
   background: #fff7ed;
 }
 
+.calendar-help {
+  margin: 8px 0 0;
+  color: #50625f;
+  line-height: 1.45;
+}
+
+.attendance-panel {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(31, 94, 87, 0.12);
+}
+
+.attendance-panel h4 {
+  margin: 0;
+  color: #12312f;
+}
+
+.participant-choice {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  background: #f8f4ee;
+  border-radius: 8px;
+}
+
+.participant-choice p {
+  margin: 4px 0 0;
+}
+
+.choice-actions {
+  display: grid;
+  gap: 8px;
+}
+
+.choice-button,
+.alternative-button {
+  border: 1px solid rgba(15, 118, 110, 0.2);
+  background: #ffffff;
+  color: #173f3b;
+  cursor: pointer;
+  border-radius: 8px;
+  font: inherit;
+  font-weight: 800;
+}
+
+.choice-button {
+  min-height: 42px;
+  padding: 8px 10px;
+}
+
+.choice-button.active,
+.alternative-button.active {
+  color: #ffffff;
+  background: #0f766e;
+  border-color: #0f766e;
+}
+
+.alternatives-list {
+  display: grid;
+  gap: 8px;
+}
+
+.alternative-button {
+  display: grid;
+  gap: 4px;
+  padding: 10px;
+  text-align: left;
+}
+
+.alternative-button small {
+  color: #60706d;
+  font-weight: 800;
+}
+
+.alternative-button.active small,
+.alternative-button.active .moment-tag {
+  color: #ffffff;
+}
+
+.attendance-summary {
+  display: grid;
+  gap: 6px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(31, 94, 87, 0.12);
+}
+
+.attendance-summary p {
+  margin: 0;
+}
+
 @media (min-width: 720px) {
   .app-shell {
     padding: 28px 24px 52px;
@@ -640,5 +744,9 @@ h1 {
 
   .calendar-day {
     grid-template-columns: 230px 1fr;
+  }
+
+  .choice-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

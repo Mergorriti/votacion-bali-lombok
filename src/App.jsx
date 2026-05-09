@@ -19,6 +19,15 @@ const priorityScore = {
   relax: 2,
   opcional: 1,
 };
+const accommodationLinks = {
+  "sanur-llegada": "https://www.booking.com/hotel/id/little-tree-house.html",
+  sidemen: "https://www.booking.com/hotel/id/the-villa-sidemen.html",
+  "kuta-lombok": "https://kanallaboutiquehotel.com/",
+  "gerupuk-360": "https://www.booking.com/hotel/id/the-confidential-mandalika.html",
+  senaru: "https://www.booking.com/hotel/id/villa-bambu-rinjani-lombok-utara1.html",
+  "gili-air": "https://www.booking.com/hotel/id/star-bar-and-bungalows.html",
+  "sanur-final": "https://tropical-bali-hotel.com/",
+};
 
 function getStoredVoter() {
   return window.localStorage.getItem("bali-voter") || voters[0];
@@ -82,11 +91,17 @@ function groupPlansByZone(plans) {
   }, {});
 }
 
+function getChoiceKey(voter, dayId, blockTime, mainPlanId) {
+  return `${voter}-${dayId}-${blockTime}-${mainPlanId}`;
+}
+
 function App() {
   const [selectedVoter, setSelectedVoter] = useState(getStoredVoter);
   const [activeZoneId, setActiveZoneId] = useState(getStoredZone);
   const [activeView, setActiveView] = useState(getStoredView);
   const [votes, setVotes] = useState([]);
+  const [calendarChoices, setCalendarChoices] = useState([]);
+  const [openAlternatives, setOpenAlternatives] = useState({});
   const [loading, setLoading] = useState(true);
   const [savingKey, setSavingKey] = useState("");
   const [message, setMessage] = useState("");
@@ -104,6 +119,20 @@ function App() {
       })),
     [votes],
   );
+  const plansById = useMemo(
+    () => Object.fromEntries(enrichedPlans.map((plan) => [plan.id, plan])),
+    [enrichedPlans],
+  );
+  const calendarChoiceMap = useMemo(
+    () =>
+      Object.fromEntries(
+        calendarChoices.map((choice) => [
+          getChoiceKey(choice.voter, choice.day_id, choice.block_time, choice.main_plan_id),
+          choice,
+        ]),
+      ),
+    [calendarChoices],
+  );
 
   const zonePlans = useMemo(
     () => enrichedPlans.filter((plan) => plan.zoneId === activeZoneId),
@@ -117,13 +146,22 @@ function App() {
     [rankedAllPlans],
   );
   const bookingPlans = useMemo(
-    () =>
-      rankedAllPlans.filter(
+    () => {
+      const selectedAlternativeIds = new Set(
+        calendarChoices
+          .filter((choice) => choice.choice_type === "alternative" && choice.alternative_plan_id)
+          .map((choice) => choice.alternative_plan_id),
+      );
+      return rankedAllPlans.filter(
         (plan) =>
           plan.bookAhead &&
-          (plan.results.mustDoCount >= 2 || plan.results.total >= 8 || plan.results.average >= 3),
-      ),
-    [rankedAllPlans],
+          (plan.results.mustDoCount >= 2 ||
+            plan.results.total >= 8 ||
+            plan.results.average >= 3 ||
+            selectedAlternativeIds.has(plan.id)),
+      );
+    },
+    [calendarChoices, rankedAllPlans],
   );
   const calendar = useMemo(() => buildCalendar(rankedAllPlans), [rankedAllPlans]);
 
@@ -149,9 +187,6 @@ function App() {
     let ignore = false;
 
     async function loadVotes({ showLoading = false } = {}) {
-      if (showLoading) {
-        setLoading(true);
-      }
       const { data, error } = await supabase
         .from("trip_votes")
         .select("*")
@@ -165,15 +200,32 @@ function App() {
         setVotes(data || []);
         setMessage("");
       }
+    }
 
-      if (showLoading) {
+    async function loadCalendarChoices() {
+      const { data, error } = await supabase
+        .from("calendar_choices")
+        .select("*")
+        .order("updated_at", { ascending: false });
+
+      if (ignore) return;
+
+      if (!error) {
+        setCalendarChoices(data || []);
+      }
+    }
+
+    async function loadInitialData() {
+      setLoading(true);
+      await Promise.all([loadVotes(), loadCalendarChoices()]);
+      if (!ignore) {
         setLoading(false);
       }
     }
 
-    loadVotes({ showLoading: true });
+    loadInitialData();
 
-    const channel = supabase
+    const votesChannel = supabase
       .channel("trip_votes_changes")
       .on(
         "postgres_changes",
@@ -181,10 +233,19 @@ function App() {
         loadVotes,
       )
       .subscribe();
+    const choicesChannel = supabase
+      .channel("calendar_choices_changes")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "calendar_choices" },
+        loadCalendarChoices,
+      )
+      .subscribe();
 
     return () => {
       ignore = true;
-      supabase.removeChannel(channel);
+      supabase.removeChannel(votesChannel);
+      supabase.removeChannel(choicesChannel);
     };
   }, []);
 
@@ -271,6 +332,47 @@ function App() {
 
     if (error) {
       setMessage("No se pudo guardar el sí o sí. Revisa Supabase.");
+    }
+
+    setSavingKey("");
+    requestAnimationFrame(() => window.scrollTo({ top: scrollPosition }));
+  }
+
+  async function saveCalendarChoice(dayId, blockTime, mainPlanId, voter, choiceType, alternativePlanId = null) {
+    if (!hasSupabaseConfig) {
+      setMessage("Conecta Supabase antes de guardar alternativas.");
+      return;
+    }
+
+    const choiceKey = getChoiceKey(voter, dayId, blockTime, mainPlanId);
+    const scrollPosition = window.scrollY;
+    setSavingKey(choiceKey);
+    setMessage("");
+
+    const nextChoice = {
+      voter,
+      day_id: dayId,
+      block_time: blockTime,
+      main_plan_id: mainPlanId,
+      choice_type: choiceType,
+      alternative_plan_id: choiceType === "alternative" ? alternativePlanId : null,
+    };
+
+    setCalendarChoices((currentChoices) => {
+      const withoutOldChoice = currentChoices.filter(
+        (choice) =>
+          getChoiceKey(choice.voter, choice.day_id, choice.block_time, choice.main_plan_id) !==
+          choiceKey,
+      );
+      return [{ ...nextChoice, updated_at: new Date().toISOString() }, ...withoutOldChoice];
+    });
+
+    const { error } = await supabase
+      .from("calendar_choices")
+      .upsert(nextChoice, { onConflict: "voter,day_id,block_time,main_plan_id" });
+
+    if (error) {
+      setMessage("No se pudo guardar la alternativa. Revisa Supabase.");
     }
 
     setSavingKey("");
@@ -476,7 +578,20 @@ function App() {
         </>
       ) : null}
 
-      {activeView === "calendar" ? <CalendarPanel calendar={calendar} /> : null}
+      {activeView === "calendar" ? (
+        <CalendarPanel
+          calendar={calendar}
+          choices={calendarChoiceMap}
+          openAlternatives={openAlternatives}
+          plans={rankedAllPlans}
+          plansById={plansById}
+          savingKey={savingKey}
+          onChoose={saveCalendarChoice}
+          onToggleAlternatives={(key) =>
+            setOpenAlternatives((current) => ({ ...current, [key]: !current[key] }))
+          }
+        />
+      ) : null}
 
       {activeView === "booking" ? (
         <RankingPanel
@@ -638,12 +753,26 @@ function PeoplePanel({ plans }) {
   );
 }
 
-function CalendarPanel({ calendar }) {
+function CalendarPanel({
+  calendar,
+  choices,
+  openAlternatives,
+  plans,
+  plansById,
+  savingKey,
+  onChoose,
+  onToggleAlternatives,
+}) {
   return (
     <section className="results-panel">
       <div className="results-heading">
         <p className="section-label">Calendario propuesto</p>
         <h2>Propuesta automática según votos</h2>
+        <p className="calendar-help">
+          El calendario propone un plan principal para cada bloque, pero no hace falta
+          que todos hagan lo mismo. Cada persona puede apuntarse al plan principal o
+          elegir una alternativa compatible.
+        </p>
       </div>
       <div className="calendar-list">
         {calendar.map((day) => (
@@ -656,22 +785,18 @@ function CalendarPanel({ calendar }) {
             <div className="calendar-slots">
               {day.slots.length ? (
                 day.slots.map((slot) => (
-                  <div
-                    className={
-                      slot.plan.results.mustDoCount >= 2 ? "slot must-slot" : "slot"
-                    }
+                  <CalendarSlot
+                    choices={choices}
+                    day={day}
                     key={`${day.id}-${slot.plan.id}`}
-                  >
-                    <span>{slot.time}</span>
-                    <strong>{slot.plan.title}</strong>
-                    <p>
-                      {slot.plan.results.total} puntos · {slot.plan.duration}
-                      {slot.plan.bookAhead ? " · Reservar" : ""}
-                      {slot.plan.results.mustDoCount >= 2
-                        ? " · Intentar encajar sí o sí"
-                        : ""}
-                    </p>
-                  </div>
+                    onChoose={onChoose}
+                    onToggleAlternatives={onToggleAlternatives}
+                    openAlternatives={openAlternatives}
+                    plans={plans}
+                    plansById={plansById}
+                    savingKey={savingKey}
+                    slot={slot}
+                  />
                 ))
               ) : (
                 <p className="empty-text">Sin plan propuesto.</p>
@@ -682,6 +807,205 @@ function CalendarPanel({ calendar }) {
       </div>
     </section>
   );
+}
+
+function CalendarSlot({
+  choices,
+  day,
+  onChoose,
+  onToggleAlternatives,
+  openAlternatives,
+  plans,
+  plansById,
+  savingKey,
+  slot,
+}) {
+  const alternatives = getCompatibleAlternatives(slot.plan, plans);
+  const attendees = [];
+  const alternativeRows = [];
+
+  voters.forEach((voter) => {
+    const choiceKey = getChoiceKey(voter, day.id, slot.time, slot.plan.id);
+    const choice = choices[choiceKey];
+
+    if (!choice || choice.choice_type === "main") {
+      attendees.push(voter);
+      return;
+    }
+
+    const alternativePlan =
+      alternatives.find((plan) => plan.id === choice.alternative_plan_id) ||
+      plansById[choice.alternative_plan_id];
+
+    alternativeRows.push({
+      voter,
+      plan: alternativePlan,
+    });
+  });
+
+  return (
+    <div
+      className={slot.plan.results.mustDoCount >= 2 ? "slot must-slot" : "slot"}
+      key={`${day.id}-${slot.plan.id}`}
+    >
+      <div className="tag-row">
+        <span className="moment-tag group">Plan de grupo</span>
+        <span className="moment-tag">{slot.time}</span>
+        {slot.plan.bookAhead ? <span className="moment-tag reserve">Reservar</span> : null}
+        {slot.plan.results.mustDoCount >= 2 ? (
+          <span className="moment-tag must">Intentar encajar sí o sí</span>
+        ) : null}
+      </div>
+      <strong>{slot.plan.title}</strong>
+      <p>
+        {slot.plan.results.total} puntos · {slot.plan.duration}
+        {slot.plan.bookAhead ? " · Reservar" : ""}
+      </p>
+
+      <div className="attendance-panel">
+        <h4>¿Quién se apunta?</h4>
+        {voters.map((voter) => {
+          const choiceKey = getChoiceKey(voter, day.id, slot.time, slot.plan.id);
+          const choice = choices[choiceKey];
+          const isAlternative = choice?.choice_type === "alternative";
+          const shouldShowAlternatives = isAlternative || openAlternatives[choiceKey];
+
+          return (
+            <div className="participant-choice" key={choiceKey}>
+              <div>
+                <strong>{voter}</strong>
+                {isAlternative ? (
+                  <span className="moment-tag individual">Alternativa individual</span>
+                ) : null}
+                {isAlternative && choice.alternative_plan_id ? (
+                  <p>
+                    Alternativa:{" "}
+                    {alternatives.find((plan) => plan.id === choice.alternative_plan_id)?.title ||
+                      plansById[choice.alternative_plan_id]?.title ||
+                      "pendiente"}
+                  </p>
+                ) : (
+                  <p>Plan principal</p>
+                )}
+              </div>
+              <div className="choice-actions">
+                <button
+                  className={!isAlternative ? "choice-button active" : "choice-button"}
+                  disabled={savingKey === choiceKey}
+                  onClick={() => onChoose(day.id, slot.time, slot.plan.id, voter, "main")}
+                  type="button"
+                >
+                  Me apunto al plan principal
+                </button>
+                <button
+                  className={isAlternative ? "choice-button active" : "choice-button"}
+                  onClick={() => onToggleAlternatives(choiceKey)}
+                  type="button"
+                >
+                  Prefiero alternativa
+                </button>
+              </div>
+              {shouldShowAlternatives ? (
+                <div className="alternatives-list">
+                  {alternatives.map((alternative) => (
+                    <button
+                      className={
+                        choice?.alternative_plan_id === alternative.id
+                          ? "alternative-button active"
+                          : "alternative-button"
+                      }
+                      disabled={savingKey === choiceKey}
+                      key={alternative.id}
+                      onClick={() =>
+                        onChoose(
+                          day.id,
+                          slot.time,
+                          slot.plan.id,
+                          voter,
+                          "alternative",
+                          alternative.id,
+                        )
+                      }
+                      type="button"
+                    >
+                      <span className="moment-tag muted">Plan compatible</span>
+                      <strong>{alternative.title}</strong>
+                      <small>
+                        {alternative.bestMoment} · {alternative.duration}
+                        {alternative.bookAhead ? " · Reservar" : ""}
+                      </small>
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="attendance-summary">
+        <p>
+          <strong>Se apuntan:</strong> {attendees.length ? attendees.join(", ") : "Nadie todavía"}
+        </p>
+        <p>
+          <strong>Alternativas:</strong>{" "}
+          {alternativeRows.length
+            ? alternativeRows
+                .map((row) => `${row.voter} → ${row.plan?.title || "alternativa pendiente"}`)
+                .join(", ")
+            : "Sin alternativas elegidas"}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function getCompatibleAlternatives(mainPlan, plans) {
+  const sameZone = plans.filter(
+    (plan) =>
+      plan.zoneId === mainPlan.zoneId &&
+      plan.id !== mainPlan.id &&
+      (plan.bestMoment === mainPlan.bestMoment ||
+        plan.bestMoment === "Flexible" ||
+        mainPlan.bestMoment === "Flexible") &&
+      (plan.duration === mainPlan.duration ||
+        plan.duration === "1-2h" ||
+        mainPlan.duration === "1-2h"),
+  );
+
+  const alternatives = sortPlans(sameZone).slice(0, 4);
+
+  if (alternatives.length >= 3) {
+    return alternatives;
+  }
+
+  return [
+    ...alternatives,
+    {
+      id: `descanso-${mainPlan.zoneId}-${mainPlan.id}`,
+      title: "Descanso / piscina / tiempo libre",
+      description: "Plan tranquilo para quien no quiera hacer la actividad principal.",
+      vibe: "relax, libre, descanso",
+      link: accommodationLinks[mainPlan.zoneId] || mainPlan.link,
+      zone: mainPlan.zone,
+      zoneId: mainPlan.zoneId,
+      zoneTitle: mainPlan.zoneTitle,
+      bestMoment: "Flexible",
+      duration: "1-2h",
+      priorityType: "relax",
+      bookAhead: false,
+      canCombineWith: ["descanso", "piscina", "cena"],
+      results: {
+        total: 0,
+        average: 0,
+        count: 0,
+        mustDoCount: 0,
+        mustDoVoters: [],
+        byVoter: {},
+        mustDoByVoter: {},
+      },
+    },
+  ];
 }
 
 function buildCalendar(rankedPlans) {
