@@ -7,7 +7,7 @@ export const ratingLabels = {
   4: "Muy top",
 };
 
-export const zones = [
+const baseZones = [
   {
     id: "sanur-llegada",
     title: "Sanur llegada",
@@ -618,6 +618,457 @@ export const zones = [
     ],
   },
 ];
+
+const planInsights = {
+  "sanur-beach-walk-atardecer": {
+    mustLevel: "Muy recomendable",
+    uniqueNote:
+      "No es único, pero es la forma más fácil y bonita de aterrizar en Bali sin estrés.",
+    travelerOpinion:
+      "Suele gustar porque es cómodo, junto al mar y muy suave después del vuelo.",
+  },
+  "sanur-bicis-beachfront-path": {
+    mustLevel: "Opcional",
+    uniqueNote:
+      "No es único: también se puede hacer bici en Gili Air, que probablemente será más especial.",
+    travelerOpinion: "Buen plan si apetece moverse un poco sin hacer excursión.",
+    similarNote: "También podremos hacer bici en Gili Air, que probablemente será más especial.",
+  },
+  "little-tree-house-piscina-cena": {
+    mustLevel: "Muy recomendable",
+    uniqueNote:
+      "No es un plan único, pero sí es importante para recuperar energía el primer día.",
+    travelerOpinion: "Suele ser lo más sensato después de un vuelo largo.",
+  },
+  "sanur-masaje-balinés-vuelo": {
+    mustLevel: "Muy recomendable",
+    uniqueNote: "No es único: también habrá masajes en Kuta Lombok y Gili Air.",
+    travelerOpinion:
+      "Muy buena idea si llegamos cansados; no es imprescindible reservarlo antes.",
+    similarNote: "También habrá opciones de masaje/spa en Kuta Lombok y Gili Air.",
+  },
+  "sidemen-tour-guide-vida-local": {
+    mustLevel: "Must absoluto",
+    uniqueNote:
+      "Es uno de los planes más únicos del viaje para ver la Bali rural de verdad.",
+    travelerOpinion:
+      "Suele ser de lo que más gusta a viajeros que buscan autenticidad, arrozales y vida local.",
+    similarNote:
+      "En Kuta Lombok también hay experiencias locales Sasak, pero Sidemen es mejor para arrozales y Bali rural.",
+  },
+  "sidemen-bali-cooking-class": {
+    mustLevel: "Muy recomendable",
+    uniqueNote:
+      "No es único: también hay cooking class / experiencia Sasak en Kuta Lombok, pero esta es más balinesa y rural.",
+    travelerOpinion:
+      "Muy buena si queremos convivir con locales y no solo visitar paisajes.",
+    similarNote:
+      "También hay una experiencia parecida en Kuta Lombok: cooking class / experiencia Sasak con Authentic Lombok.",
+  },
+  "sidemen-trekking-rural": {
+    mustLevel: "Muy recomendable",
+    uniqueNote:
+      "Parecido al trekking de arrozales con guía; si hacemos uno, no hace falta hacer ambos.",
+    travelerOpinion:
+      "Gusta mucho por los paisajes, pero puede ser repetitivo si ya hacemos otro trekking en Sidemen.",
+    similarNote:
+      "Si no hacemos este trekking, todavía tendremos naturaleza en Senaru con cascadas y zona Rinjani.",
+  },
+  "telaga-waja-rafting-sidemen": {
+    mustLevel: "Muy recomendable",
+    uniqueNote: "Plan único en la ruta: si queremos rafting, este es el momento.",
+    travelerOpinion:
+      "Suele gustar a quienes quieren aventura y agua; menos ideal si buscamos un día rural y tranquilo.",
+    similarNote:
+      "No hay otro rafting similar en la ruta; si apetece aventura de agua, esta es la mejor opción en Bali.",
+  },
+  "kertha-gosa-ruta-sidemen": {
+    mustLevel: "Opcional",
+    uniqueNote: "No es único; es una parada cultural agradable, pero no imprescindible.",
+    travelerOpinion:
+      "Interesante si queremos cultura en ruta, pero no debe quitar tiempo a Sidemen.",
+  },
+  "selong-belanak-surf-principiantes": {
+    mustLevel: "Muy recomendable",
+    uniqueNote:
+      "No es único: también habrá surf en Gerupuk, pero Selong Belanak es mejor para principiantes.",
+    travelerOpinion: "Suele gustar porque la playa es amplia y las olas son más fáciles.",
+    similarNote:
+      "También habrá surf en Gerupuk con 360 Surf Academy, pero Selong Belanak es más fácil para principiantes.",
+  },
+  "selong-belanak-libre-warungs": {
+    mustLevel: "Muy recomendable",
+    uniqueNote:
+      "No es único como playa, pero Selong Belanak tiene un ambiente muy especial y local.",
+    travelerOpinion:
+      "Suele gustar incluso a quien no surfea por la playa, los warungs y el ambiente relajado.",
+  },
+  "mawun-tampah-playas": {
+    mustLevel: "Opcional",
+    uniqueNote:
+      "No es único: habrá muchas playas, pero estas son buenas para explorar sin plan cerrado.",
+    travelerOpinion:
+      "Buen plan visual, aunque puede sentirse menos especial si ya hacemos Tanjung Aan y Gili.",
+  },
+  "tanjung-aan-bukit-merese": {
+    mustLevel: "Must absoluto",
+    uniqueNote:
+      "Plan casi único por las vistas panorámicas; el sunset de Gili es diferente, más de playa.",
+    travelerOpinion: "Suele ser uno de los sunsets más memorables de Lombok.",
+    similarNote:
+      "También habrá sunsets en Gili Air, pero Bukit Merese es el sunset más panorámico de Lombok.",
+  },
+  "mana-eco-retreat-yoga": {
+    mustLevel: "Opcional",
+    uniqueNote: "No es único: también hay yoga en Ashtari y Gili Air.",
+    travelerOpinion:
+      "Gusta si apetece wellness, brunch y descanso, pero no es imprescindible para todos.",
+    similarNote:
+      "También hay yoga en Gili Air, pero Mana queda mejor para una experiencia wellness en Kuta Lombok.",
+  },
+  "ashtari-comida-yoga-vistas": {
+    mustLevel: "Muy recomendable",
+    uniqueNote: "No es único como yoga, pero sí destaca por las vistas.",
+    travelerOpinion: "Suele gustar incluso sin hacer yoga por el restaurante y el paisaje.",
+    similarNote:
+      "También se puede hacer yoga en Mana o Gili Air, pero Ashtari destaca por las vistas.",
+  },
+  "mana-spa-masaje-kuta": {
+    mustLevel: "Opcional",
+    uniqueNote: "No es único: también hay masaje en Sanur y Gili Air.",
+    travelerOpinion: "Muy buen plan de recuperación si hacemos surf o mucho movimiento.",
+    similarNote:
+      "También se puede hacer masaje en Sanur al llegar o en Gili Air después de snorkel/buceo.",
+  },
+  "masaje-recuperacion-surf-kuta": {
+    mustLevel: "Muy recomendable",
+    uniqueNote:
+      "No es único, pero encaja especialmente bien después de surf en Selong o Gerupuk.",
+    travelerOpinion: "Suele ser muy agradecido si hay cansancio físico.",
+  },
+  "tiga-spies-social": {
+    mustLevel: "Muy recomendable para los jóvenes",
+    uniqueNote: "Plan único para conocer gente; no se sustituye con una excursión.",
+    travelerOpinion:
+      "Puede ser clave si Lucrecia, Alejandro y Fermín quieren ambiente joven y social.",
+  },
+  "authentic-lombok-sasak": {
+    mustLevel: "Must absoluto",
+    uniqueNote:
+      "Plan muy diferencial: es la mejor oportunidad para cultura local Sasak y comida en Lombok.",
+    travelerOpinion:
+      "Suele aportar más autenticidad que una visita turística rápida a un pueblo.",
+    similarNote:
+      "También hay una opción de cocina en Sidemen, más centrada en cocina balinesa rural.",
+  },
+  "sade-traditional-weaving": {
+    mustLevel: "Opcional",
+    uniqueNote:
+      "No es único: hay otras formas más auténticas de conocer cultura Sasak.",
+    travelerOpinion:
+      "Visual e interesante, pero algunos viajeros lo sienten turístico.",
+  },
+  "360-gerupuk-surf-barca": {
+    mustLevel: "Must absoluto",
+    uniqueNote: "Plan único del viaje: surf con barca en una bahía local de Lombok.",
+    travelerOpinion:
+      "Suele ser de los planes más memorables para gente joven o con ganas de aventura.",
+    similarNote:
+      "También se puede surfear en Selong Belanak, pero Gerupuk es más local y se accede en barca.",
+  },
+  "gerupuk-bay-surf-barca": {
+    mustLevel: "Must absoluto",
+    uniqueNote: "Muy único: mezcla pueblo pesquero, barca local y surf.",
+    travelerOpinion:
+      "Gusta por sentirse menos turístico y más local que una playa normal.",
+    similarNote:
+      "Si no hacemos Gerupuk, Selong Belanak es la alternativa más fácil para surf/playa.",
+  },
+  "gerupuk-bay-visual-guide": {
+    mustLevel: "Opcional",
+    uniqueNote: "No es un plan en sí, es más para entender si nos apetece Gerupuk.",
+    travelerOpinion: "Útil para decidir, pero no cuenta como actividad principal.",
+  },
+  "tiu-kelep-sendang-gile-local": {
+    mustLevel: "Must absoluto",
+    uniqueNote: "Plan único: no hay cascadas equivalentes en el resto de la ruta.",
+    travelerOpinion: "Suele ser uno de los grandes highlights naturales de Lombok.",
+    similarNote:
+      "No hay cascadas equivalentes en el resto de la ruta; Senaru es el mejor momento para este tipo de naturaleza.",
+  },
+  "tiu-kelep-waterfall-selva": {
+    mustLevel: "Must absoluto",
+    uniqueNote: "Plan único de naturaleza y selva en esta ruta.",
+    travelerOpinion:
+      "Muy valorado por el entorno de jungla y la sensación de aventura.",
+  },
+  "senaru-rinjani-zona": {
+    mustLevel: "Muy recomendable",
+    uniqueNote: "Único por el paisaje de montaña y el ambiente Rinjani.",
+    travelerOpinion:
+      "Gusta a quien quiere ver una Lombok distinta al sur surfero y las islas.",
+  },
+  "gili-snorkel-privado": {
+    mustLevel: "Must absoluto",
+    uniqueNote:
+      "Plan único del bloque Gili: si queremos snorkel wow, este es el mejor momento.",
+    travelerOpinion:
+      "Suele ser de los planes que más ilusión generan por tortugas, coral y estatuas.",
+    similarNote:
+      "También se puede hacer snorkel libre desde la playa en Gili Air, pero el barco privado permite ver más zonas.",
+  },
+  "gili-turtle-point-playa": {
+    mustLevel: "Muy recomendable",
+    uniqueNote: "No sustituye al barco privado, pero es una opción flexible y fácil.",
+    travelerOpinion: "Muy buena opción si queremos algo libre sin reservar tour.",
+    similarNote:
+      "Si queremos algo más completo, también podemos reservar snorkel privado con tortugas, coral y estatuas.",
+  },
+  "blue-marlin-discover-scuba": {
+    mustLevel: "Muy recomendable",
+    uniqueNote: "Plan especial: solo tiene sentido hacerlo en Gili Air dentro de esta ruta.",
+    travelerOpinion:
+      "Muy memorable para quien quiera probar buceo; no todos tienen por qué hacerlo.",
+    similarNote: "Manta Dive Gili Air ofrece una alternativa parecida de iniciación al buceo.",
+  },
+  "manta-dive-gili-air": {
+    mustLevel: "Muy recomendable",
+    uniqueNote: "Alternativa similar a Blue Marlin para probar buceo.",
+    travelerOpinion: "Buena opción si preferimos comparar escuelas antes de reservar.",
+    similarNote: "Blue Marlin Gili Air también ofrece Discover Scuba.",
+  },
+  "gili-air-bici-isla": {
+    mustLevel: "Muy recomendable",
+    uniqueNote: "Más especial que Sanur porque Gili Air no tiene coches.",
+    travelerOpinion: "Suele gustar mucho por el ritmo de isla, playas y cafés.",
+    similarNote:
+      "También se puede hacer bici en Sanur, pero Gili Air es más especial porque la isla no tiene coches.",
+  },
+  "gili-sunset-oeste": {
+    mustLevel: "Must absoluto",
+    uniqueNote:
+      "No es igual que Bukit Merese; este es sunset de isla, playa y ambiente chill.",
+    travelerOpinion: "Muy fácil de hacer y de los momentos más bonitos de Gili Air.",
+    similarNote:
+      "También hay sunset en Bukit Merese, más panorámico; Gili Air será más de playa y ambiente chill.",
+  },
+  "gili-night-market": {
+    mustLevel: "Muy recomendable",
+    uniqueNote: "Plan diferente de noche; no es sustituible por una cena normal de hotel.",
+    travelerOpinion:
+      "Gusta si queremos comida local y ambiente sencillo de isla.",
+  },
+  "gili-live-music": {
+    mustLevel: "Opcional",
+    uniqueNote:
+      "No es único, pero puede ser buen plan social si hay ambiente esa noche.",
+    travelerOpinion: "Depende mucho del día y del bar; mejor dejarlo flexible.",
+  },
+  "gili-sunrise-este": {
+    mustLevel: "Opcional",
+    uniqueNote: "Único si apetece madrugar, pero no imprescindible.",
+    travelerOpinion: "Muy bonito si el grupo tiene energía, pero no conviene forzarlo.",
+  },
+  "gili-yoga-wellness": {
+    mustLevel: "Opcional",
+    uniqueNote: "No es único: también hay yoga en Mana y Ashtari.",
+    travelerOpinion:
+      "Buen plan de descanso, especialmente si el día anterior hubo snorkel o buceo.",
+    similarNote: "También hay yoga en Mana y Ashtari en Kuta Lombok.",
+  },
+  "gili-masaje-post-mar": {
+    mustLevel: "Muy recomendable",
+    uniqueNote: "No es único, pero encaja muy bien con un día de mar.",
+    travelerOpinion:
+      "Plan fácil y muy agradecido después de snorkel, bici o buceo.",
+    similarNote:
+      "También hay spa/masaje en Kuta Lombok, especialmente en Mana Eco Retreat.",
+  },
+  "gili-spa-wellness-lento": {
+    mustLevel: "Opcional",
+    uniqueNote: "No es único, pero ayuda a no saturar los días de isla.",
+    travelerOpinion:
+      "Bueno si queremos bajar el ritmo y no convertir Gili en una lista de excursiones.",
+  },
+  "gili-meno-corta": {
+    mustLevel: "Opcional",
+    uniqueNote:
+      "No es imprescindible si hacemos snorkel privado, porque ese tour ya puede pasar por Gili Meno.",
+    travelerOpinion:
+      "Bonito para quien quiera playas más tranquilas, pero puede ser repetitivo.",
+  },
+  "tropical-bali-descanso": {
+    mustLevel: "Must absoluto",
+    uniqueNote:
+      "No es turístico, pero es necesario para descansar antes del vuelo de madrugada.",
+    travelerOpinion: "Muy práctico; evita llegar agotados al aeropuerto.",
+  },
+  "sanur-cena-final": {
+    mustLevel: "Muy recomendable",
+    uniqueNote: "No es único, pero es buen cierre antes del vuelo.",
+    travelerOpinion:
+      "Suele ser mejor cenar tranquilos que ir con prisas al aeropuerto.",
+  },
+  "sanur-ultimo-paseo": {
+    mustLevel: "Opcional",
+    uniqueNote: "No es único porque ya pasamos por Sanur al inicio.",
+    travelerOpinion: "Buen cierre si queda tiempo, pero no prioritario.",
+  },
+};
+
+const strongPlanIds = new Set([
+  "telaga-waja-rafting-sidemen",
+  "360-gerupuk-surf-barca",
+  "gerupuk-bay-surf-barca",
+  "blue-marlin-discover-scuba",
+  "manta-dive-gili-air",
+]);
+
+const mediumPlanIds = new Set([
+  "sidemen-tour-guide-vida-local",
+  "sidemen-bali-cooking-class",
+  "sidemen-trekking-rural",
+  "selong-belanak-surf-principiantes",
+  "mawun-tampah-playas",
+  "authentic-lombok-sasak",
+  "tiu-kelep-sendang-gile-local",
+  "tiu-kelep-waterfall-selva",
+  "gili-snorkel-privado",
+  "gili-turtle-point-playa",
+  "gili-meno-corta",
+]);
+
+const costOverrides = {
+  "sidemen-tour-guide-vida-local": "Medio",
+  "sidemen-bali-cooking-class": "Medio",
+  "sidemen-trekking-rural": "Medio",
+  "telaga-waja-rafting-sidemen": "Caro",
+  "selong-belanak-surf-principiantes": "Medio",
+  "selong-belanak-libre-warungs": "Barato",
+  "mawun-tampah-playas": "Barato",
+  "tanjung-aan-bukit-merese": "Barato",
+  "mana-eco-retreat-yoga": "Medio",
+  "ashtari-comida-yoga-vistas": "Medio",
+  "mana-spa-masaje-kuta": "Medio",
+  "masaje-recuperacion-surf-kuta": "Medio",
+  "tiga-spies-social": "Barato",
+  "authentic-lombok-sasak": "Medio",
+  "sade-traditional-weaving": "Barato",
+  "360-gerupuk-surf-barca": "Medio",
+  "gerupuk-bay-surf-barca": "Medio",
+  "tiu-kelep-sendang-gile-local": "Medio",
+  "tiu-kelep-waterfall-selva": "Barato",
+  "senaru-rinjani-zona": "Gratis",
+  "gili-snorkel-privado": "Medio",
+  "gili-turtle-point-playa": "Barato",
+  "blue-marlin-discover-scuba": "Caro",
+  "manta-dive-gili-air": "Caro",
+  "gili-air-bici-isla": "Barato",
+  "gili-sunset-oeste": "Gratis",
+  "gili-night-market": "Barato",
+  "gili-live-music": "Barato",
+  "gili-sunrise-este": "Gratis",
+  "gili-yoga-wellness": "Medio",
+  "gili-masaje-post-mar": "Medio",
+  "gili-spa-wellness-lento": "Medio",
+  "gili-meno-corta": "Barato",
+  "tropical-bali-descanso": "Gratis",
+  "sanur-cena-final": "Medio",
+  "sanur-ultimo-paseo": "Gratis",
+};
+
+const backupPlans = {
+  "telaga-waja-rafting-sidemen": "Plan B suave: cooking class en Sidemen o piscina/villa.",
+  "sidemen-tour-guide-vida-local": "Plan B suave: paseo corto por arrozales y tarde de villa.",
+  "sidemen-trekking-rural": "Plan B suave: cooking class o piscina con vistas en la villa.",
+  "selong-belanak-surf-principiantes": "Plan B suave: Selong Belanak por libre, warungs y baño sin clase.",
+  "mawun-tampah-playas": "Plan B suave: playa de Kuta y cena tranquila.",
+  "tanjung-aan-bukit-merese": "Plan B suave: playa de Kuta y cena tranquila.",
+  "360-gerupuk-surf-barca": "Plan B suave: Ashtari con vistas o masaje de recuperación.",
+  "gerupuk-bay-surf-barca": "Plan B suave: Ashtari con vistas o masaje de recuperación.",
+  "tiu-kelep-sendang-gile-local": "Plan B suave: paseo por Senaru y warung local.",
+  "tiu-kelep-waterfall-selva": "Plan B suave: paseo por Senaru y warung local.",
+  "gili-snorkel-privado": "Plan B suave: snorkel desde Turtle Point y sunset.",
+  "blue-marlin-discover-scuba": "Plan B suave: snorkel desde la playa o bici por Gili Air.",
+  "manta-dive-gili-air": "Plan B suave: snorkel desde la playa o bici por Gili Air.",
+};
+
+const authenticityLevels = {
+  "sanur-beach-walk-atardecer": "Bonito pero conocido",
+  "sanur-bicis-beachfront-path": "Bonito pero conocido",
+  "little-tree-house-piscina-cena": "Solo si apetece",
+  "sanur-masaje-balinés-vuelo": "Solo si apetece",
+  "sidemen-tour-guide-vida-local": "Muy auténtico",
+  "sidemen-bali-cooking-class": "Muy auténtico",
+  "sidemen-trekking-rural": "Muy auténtico",
+  "kertha-gosa-ruta-sidemen": "Turístico pero merece la pena",
+  "telaga-waja-rafting-sidemen": "No local, pero memorable",
+  "selong-belanak-surf-principiantes": "Bonito pero conocido",
+  "selong-belanak-libre-warungs": "Muy auténtico",
+  "mawun-tampah-playas": "Bonito pero conocido",
+  "tanjung-aan-bukit-merese": "Turístico pero merece la pena",
+  "mana-eco-retreat-yoga": "Bonito pero conocido",
+  "ashtari-comida-yoga-vistas": "Bonito pero conocido",
+  "mana-spa-masaje-kuta": "Bonito pero conocido",
+  "masaje-recuperacion-surf-kuta": "Solo si apetece",
+  "tiga-spies-social": "Muy auténtico para conocer gente joven",
+  "authentic-lombok-sasak": "Muy auténtico",
+  "sade-traditional-weaving": "Solo si apetece",
+  "360-gerupuk-surf-barca": "Muy auténtico",
+  "gerupuk-bay-surf-barca": "Muy auténtico",
+  "gerupuk-bay-visual-guide": "Solo si apetece",
+  "tiu-kelep-sendang-gile-local": "Bonito pero conocido",
+  "tiu-kelep-waterfall-selva": "Bonito pero conocido",
+  "senaru-rinjani-zona": "Muy auténtico",
+  "gili-snorkel-privado": "Bonito pero conocido",
+  "gili-turtle-point-playa": "Muy auténtico",
+  "blue-marlin-discover-scuba": "No local, pero memorable",
+  "manta-dive-gili-air": "No local, pero memorable",
+  "gili-air-bici-isla": "Muy auténtico",
+  "gili-sunset-oeste": "Bonito pero conocido",
+  "gili-night-market": "Muy auténtico",
+  "gili-live-music": "Muy auténtico si hay ambiente esa noche",
+  "gili-sunrise-este": "Solo si apetece",
+  "gili-yoga-wellness": "Bonito pero conocido",
+  "gili-masaje-post-mar": "Solo si apetece",
+  "gili-spa-wellness-lento": "Solo si apetece",
+  "gili-meno-corta": "Bonito pero conocido",
+  "tropical-bali-descanso": "Solo si apetece",
+  "sanur-cena-final": "Solo si apetece",
+  "sanur-ultimo-paseo": "Bonito pero conocido",
+};
+
+function getPlanLogistics(plan) {
+  const title = plan.title.toLowerCase();
+  const effortLevel = strongPlanIds.has(plan.id)
+    ? "Fuerte"
+    : mediumPlanIds.has(plan.id)
+      ? "Medio"
+      : "Suave";
+  const costLevel =
+    costOverrides[plan.id] ||
+    (title.includes("masaje") || title.includes("spa")
+      ? "Medio"
+      : title.includes("cena")
+        ? "Medio"
+        : "Gratis");
+
+  return {
+    effortLevel,
+    costLevel,
+    ...(backupPlans[plan.id] ? { backupPlan: backupPlans[plan.id] } : {}),
+  };
+}
+
+export const zones = baseZones.map((zone) => ({
+  ...zone,
+  plans: zone.plans.map((plan) => ({
+    ...plan,
+    ...planInsights[plan.id],
+    authenticityLevel: authenticityLevels[plan.id],
+    ...getPlanLogistics(plan),
+  })),
+}));
 
 export const tripDays = [
   {
