@@ -938,6 +938,86 @@ function App() {
   );
 }
 
+const quickPlanGroups = [
+  {
+    title: "Aventura",
+    summary: "Planes con más energía para quien quiera naturaleza, agua o adrenalina.",
+    plans: [
+      "Rafting en Telaga Waja",
+      "Cascadas Tiu Kelep + Sendang Gile",
+      "Discover Scuba en Gili Air",
+      "Gerupuk surf con barca",
+    ],
+  },
+  {
+    title: "Surf y mar",
+    summary: "Surf, snorkel y mar para probar cosas nuevas o ir a vuestro ritmo.",
+    plans: [
+      "Selong Belanak para principiantes",
+      "360 Surf Academy en Gerupuk",
+      "Snorkel privado con tortugas",
+      "Turtle Point desde la playa",
+    ],
+  },
+  {
+    title: "Bali rural / local",
+    summary: "Planes para conocer vida local, arrozales, cocina y cultura sin ir corriendo.",
+    plans: [
+      "Sidemen arrozales + vida local",
+      "Sidemen cooking class",
+      "Authentic Lombok / experiencia Sasak",
+      "Senaru y zona Rinjani",
+    ],
+  },
+  {
+    title: "Relax y wellness",
+    summary: "Opciones suaves para recuperar energía entre traslados, surf y playa.",
+    plans: [
+      "Masaje después del vuelo",
+      "Mana Eco Retreat",
+      "Ashtari con vistas",
+      "H2O Yoga Gili Air",
+      "Spa / wellness lento",
+    ],
+  },
+  {
+    title: "Compras",
+    summary: "Textiles, ropa de playa, artesanía y regalos colocados donde tiene más lógica.",
+    plans: [
+      "Textiles y artesanía en Sidemen",
+      "Boutiques y mercado en Kuta Lombok",
+      "Compras finales en Sanur",
+    ],
+  },
+  {
+    title: "Planes sociales / isla",
+    summary: "Ideas fáciles para mezclar gente, bici, cena local y ambiente de isla.",
+    plans: [
+      "Tiga Spies hostel",
+      "Bici alrededor de Gili Air",
+      "Sunset en Gili Air",
+      "Cena local informal en Gili Air",
+      "Live music si hay ambiente",
+    ],
+  },
+  {
+    title: "Paisajes wow",
+    summary: "Sitios para fotos, vistas grandes y momentos bonitos del viaje.",
+    plans: [
+      "Bukit Merese sunset",
+      "Tanjung Aan",
+      "Gili Air sunset",
+      "Sidemen vistas",
+      "Tiu Kelep waterfall",
+    ],
+  },
+  {
+    title: "Planes especiales",
+    summary: "Los planes más memorables o distintos, para mirar con cariño antes de votar.",
+    plans: ["Paseo a caballo por Gili Air", "Discover Scuba", "Snorkel privado", "Rafting"],
+  },
+];
+
 function HomePanel({ onStart }) {
   return (
     <section className="home-panel">
@@ -995,6 +1075,37 @@ function HomePanel({ onStart }) {
         para distinguir entre planes locales, planes famosos que merecen la pena y
         planes más turísticos o de descanso.
       </p>
+      <section className="quick-summary" aria-labelledby="quick-summary-title">
+        <div className="quick-summary-header">
+          <p className="section-label">Resumen rápido de planes</p>
+          <h2 id="quick-summary-title">Resumen rápido de planes</h2>
+          <p>
+            Antes de votar, aquí tenéis una idea general de los planes que hay en el
+            viaje. Luego podéis entrar en Planes por zona para ver cada opción con
+            su link, foto y detalles.
+          </p>
+        </div>
+        <div className="quick-plan-grid">
+          {quickPlanGroups.map((group) => (
+            <article className="quick-plan-card" key={group.title}>
+              <h3>{group.title}</h3>
+              <p>{group.summary}</p>
+              <ul>
+                {group.plans.map((plan) => (
+                  <li key={plan}>{plan}</li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+        <button className="start-button quick-start" onClick={onStart} type="button">
+          Ver planes y votar
+        </button>
+        <p className="quick-summary-note">
+          No hace falta decidir ahora qué día hacer cada cosa. Primero votamos qué
+          planes nos apetecen; después la app los ordena en el calendario.
+        </p>
+      </section>
       <button className="start-button" onClick={onStart} type="button">
         Empezar a votar
       </button>

@@ -683,6 +683,72 @@ h1 {
   border-radius: 8px;
 }
 
+.quick-summary {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(31, 94, 87, 0.12);
+}
+
+.quick-summary-header h2 {
+  margin-bottom: 8px;
+  font-size: 1.45rem;
+}
+
+.quick-summary-header p:last-child,
+.quick-summary-note {
+  color: #50625f;
+  line-height: 1.5;
+}
+
+.quick-plan-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.quick-plan-card {
+  padding: 14px;
+  background: #fdfbf7;
+  border: 1px solid rgba(15, 118, 110, 0.12);
+  border-radius: 8px;
+}
+
+.quick-plan-card h3 {
+  margin-bottom: 7px;
+  color: #173f3b;
+  font-size: 1rem;
+}
+
+.quick-plan-card p {
+  margin-bottom: 10px;
+  color: #50625f;
+  line-height: 1.42;
+}
+
+.quick-plan-card ul {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+  padding-left: 18px;
+  color: #12312f;
+}
+
+.quick-plan-card li {
+  line-height: 1.35;
+}
+
+.quick-start {
+  margin-top: 14px;
+}
+
+.quick-summary-note {
+  margin: 12px 0 0;
+  padding: 12px;
+  background: #f8f4ee;
+  border-radius: 8px;
+}
+
 .start-button {
   width: 100%;
   min-height: 56px;
@@ -1083,6 +1149,10 @@ h1 {
 
   .voter-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .quick-plan-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .day-tabs {
