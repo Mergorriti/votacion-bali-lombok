@@ -141,6 +141,20 @@ const baseZones = [
         bookAhead: false,
         canCombineWith: ["traslado", "villa"],
       },
+      {
+        id: "sidemen-textiles-artesania",
+        title: "Textiles y artesanía local en Sidemen",
+        description:
+          "Paseo tranquilo por talleres de tejido o pequeñas tiendas de Sidemen para ver textiles balineses, songket, endek, sarongs, pañuelos, cestas o artesanía local. Dónde ir: Sidemen Weaving Villages, Mira Weaving Shop o talleres locales de songket/endek si el guía o el alojamiento recomienda alguno. Merece la pena porque Sidemen tiene tradición de tejido balinés y es mejor para compras auténticas que para souvenirs turísticos normales. Encaja el 28 de julio porque tenemos día completo en Sidemen y puede ser un plan suave después de comer o una alternativa para quien no quiera trekking, rafting o cooking class.",
+        vibe: "compras, artesanía, textiles, local",
+        link: "https://wtp.travel/travel-guides/indonesia/sidemen/shopping/",
+        zone: "Sidemen",
+        bestMoment: "Tarde",
+        duration: "1-2h",
+        priorityType: "local",
+        bookAhead: false,
+        canCombineWith: ["villa", "paseo", "cooking class"],
+      },
     ],
   },
   {
@@ -294,6 +308,20 @@ const baseZones = [
         bookAhead: false,
         canCombineWith: ["playa", "comida"],
       },
+      {
+        id: "kuta-lombok-boutiques-mercado",
+        title: "Boutiques y mercado en Kuta Lombok",
+        description:
+          "Paseo por la zona central de Kuta Lombok para mirar boutiques pequeñas, street markets, surfwear, ropa boho, bikinis, bolsos handmade, joyería, pareos y artesanía local. Dónde ir: zona central de Kuta Lombok, Kuta Lombok Street Markets, Kuta Art Market o tiendas cerca de Jalan Pariwisata Pantai Kuta, además de boutiques pequeñas de surfwear y moda boho. Merece la pena porque Kuta Lombok tiene una escena joven y surfer para ropa de playa, accesorios, bolsos, joyería y recuerdos de estilo boho/surf. Encaja el 1 o 2 de agosto porque hay varios días en Kuta, hostel, playa y tardes flexibles antes de cenar.",
+        vibe: "compras, ropa, boho, surf, artesanía",
+        link: "https://wtp.travel/travel-guides/indonesia/lombok/shopping/",
+        zone: "Kuta Lombok / Kanalla / Tiga Spies",
+        bestMoment: "Tarde",
+        duration: "1-2h",
+        priorityType: "opcional",
+        bookAhead: false,
+        canCombineWith: ["playa", "hostel", "café"],
+      },
     ],
   },
   {
@@ -407,7 +435,7 @@ const baseZones = [
         duration: "medio día",
         priorityType: "imprescindible",
         bookAhead: true,
-        canCombineWith: ["bici", "sunset", "night market"],
+        canCombineWith: ["bici", "sunset", "cena local"],
       },
       {
         id: "gili-turtle-point-playa",
@@ -491,10 +519,10 @@ const baseZones = [
       },
       {
         id: "gili-night-market",
-        title: "Night Market de Gili Air",
+        title: "Cena local informal en Gili Air: warung o puestos cerca del puerto",
         description:
-          "Pasear por el mercado nocturno, probar comida local y ver ambiente de isla por la noche.",
-        vibe: "noche, comida, local",
+          "Cena sencilla en Gili Air buscando warungs locales o puestos informales cerca del puerto. No lo planteamos como un night market fijo, porque puede variar según temporada, pero sí como plan flexible para comer local sin reservar.",
+        vibe: "local, cena sencilla, flexible, isla",
         link: "https://happinessontheway.com/things-to-do-in-gili-air/",
         zone: "Gili Air",
         bestMoment: "Noche",
@@ -514,7 +542,7 @@ const baseZones = [
         duration: "noche",
         priorityType: "social",
         bookAhead: false,
-        canCombineWith: ["sunset", "cena", "night market"],
+        canCombineWith: ["sunset", "cena", "cena local"],
       },
       {
         id: "gili-sunrise-este",
@@ -629,6 +657,20 @@ const baseZones = [
         bookAhead: false,
         canCombineWith: ["cena", "hotel"],
       },
+      {
+        id: "sanur-final-compras-regalos",
+        title: "Compras finales en Sanur: ropa, artesanía y regalos",
+        description:
+          "Último paseo de compras antes de volver: Jalan Danau Tamblingan, Sindhu Beach Art Market, Nogo Bali Ikat Center o ICON Bali Mall para comprar ropa, pareos, artesanía, bolsos, bisutería, decoración pequeña, textiles y regalos. Merece la pena porque Sanur es el mejor sitio de la ruta para compras finales: tiene tiendas, mercado, artesanía, textiles y opción de mall moderno. Además, al estar al final no cargamos con las compras durante todo el viaje. Encaja el 8 de agosto después de llegar desde Gili Air y antes de la cena o transfer al aeropuerto.",
+        vibe: "compras, regalos, ropa, artesanía, final del viaje",
+        link: "https://www.baliholidaysecrets.com/icon-bali-mall/",
+        zone: "Sanur final",
+        bestMoment: "Tarde",
+        duration: "1-2h",
+        priorityType: "relax",
+        bookAhead: false,
+        canCombineWith: ["hotel", "cena", "paseo"],
+      },
     ],
   },
 ];
@@ -701,6 +743,15 @@ const planInsights = {
     uniqueNote: "No es único; es una parada cultural agradable, pero no imprescindible.",
     travelerOpinion:
       "Interesante si queremos cultura en ruta, pero no debe quitar tiempo a Sidemen.",
+  },
+  "sidemen-textiles-artesania": {
+    mustLevel: "Opcional",
+    uniqueNote:
+      "No es shopping masivo; es más interesante si queremos una pieza especial o ver artesanía local.",
+    travelerOpinion:
+      "Suele gustar a quien busca algo más auténtico que un souvenir normal. Mejor hacerlo sin prisas y preguntando al alojamiento o guía por talleres reales.",
+    similarNote:
+      "También habrá compras en Kuta Lombok y Sanur, pero Sidemen es mejor para textiles y artesanía local con más historia.",
   },
   "selong-belanak-surf-principiantes": {
     mustLevel: "Muy recomendable",
@@ -782,6 +833,15 @@ const planInsights = {
     travelerOpinion:
       "Visual e interesante, pero algunos viajeros lo sienten turístico.",
   },
+  "kuta-lombok-boutiques-mercado": {
+    mustLevel: "Opcional",
+    uniqueNote:
+      "No es imprescindible, pero puede ser buen momento para comprar ropa de playa, bolsos, joyería o accesorios.",
+    travelerOpinion:
+      "Suele gustar a quien busca ropa de viaje, bikinis, surfwear, bolsos o recuerdos con estilo más joven.",
+    similarNote:
+      "También se puede comprar en Sanur al final del viaje, pero Kuta Lombok tiene más estilo joven, boho y surf.",
+  },
   "360-gerupuk-surf-barca": {
     mustLevel: "Must absoluto",
     uniqueNote: "Plan único del viaje: surf con barca en una bahía local de Lombok.",
@@ -856,7 +916,7 @@ const planInsights = {
     uniqueNote: "Más especial que Sanur porque Gili Air no tiene coches.",
     travelerOpinion: "Suele gustar mucho por el ritmo de isla, playas y cafés.",
     similarNote:
-      "También se puede hacer bici en Sanur, pero Gili Air es más especial porque la isla no tiene coches.",
+      "También se puede hacer bici en Sanur, pero Gili Air es más especial porque la isla no tiene coches. Si apetece mirar tiendas, Gili Air tiene boutiques pequeñas de ropa de isla, bikinis, joyería, accesorios, recuerdos y artesanía local. No es un gran plan de compras, pero encaja dentro de un día lento de bici, playa y sunset.",
   },
   "gili-sunset-oeste": {
     mustLevel: "Must absoluto",
@@ -876,10 +936,13 @@ const planInsights = {
       "También existen paseos a caballo en Sanur y otras zonas de Lombok, pero Gili Air al sunset encaja mejor con nuestro viaje.",
   },
   "gili-night-market": {
-    mustLevel: "Muy recomendable",
-    uniqueNote: "Plan diferente de noche; no es sustituible por una cena normal de hotel.",
+    mustLevel: "Opcional",
+    uniqueNote:
+      "No es un plan único ni garantizado como mercado; es una opción flexible de cena local.",
     travelerOpinion:
-      "Gusta si queremos comida local y ambiente sencillo de isla.",
+      "Puede estar bien si encontramos ambiente cerca del puerto, pero no conviene venderlo como imprescindible.",
+    similarNote:
+      "Si buscamos un night market más claro y grande, el famoso está en Gili Trawangan. En Gili Air es mejor plantearlo como cena local informal o warungs.",
   },
   "gili-live-music": {
     mustLevel: "Opcional",
@@ -937,6 +1000,15 @@ const planInsights = {
     uniqueNote: "No es único porque ya pasamos por Sanur al inicio.",
     travelerOpinion: "Buen cierre si queda tiempo, pero no prioritario.",
   },
+  "sanur-final-compras-regalos": {
+    mustLevel: "Muy recomendable",
+    uniqueNote:
+      "Es el mejor momento para comprar regalos porque ya estamos al final del viaje.",
+    travelerOpinion:
+      "Muy práctico si queremos llevar recuerdos, ropa o regalos. Mejor hacerlo antes de la cena final y no dejarlo para última hora.",
+    similarNote:
+      "También habrá compras pequeñas en Sidemen y Kuta Lombok, pero Sanur al final es lo más cómodo para comprar sin cargar todo el viaje.",
+  },
 };
 
 const strongPlanIds = new Set([
@@ -966,6 +1038,7 @@ const costOverrides = {
   "sidemen-bali-cooking-class": "Medio",
   "sidemen-trekking-rural": "Medio",
   "telaga-waja-rafting-sidemen": "Caro",
+  "sidemen-textiles-artesania": "Barato",
   "selong-belanak-surf-principiantes": "Medio",
   "selong-belanak-libre-warungs": "Barato",
   "mawun-tampah-playas": "Barato",
@@ -977,6 +1050,7 @@ const costOverrides = {
   "tiga-spies-social": "Barato",
   "authentic-lombok-sasak": "Medio",
   "sade-traditional-weaving": "Barato",
+  "kuta-lombok-boutiques-mercado": "Barato",
   "360-gerupuk-surf-barca": "Medio",
   "gerupuk-bay-surf-barca": "Medio",
   "tiu-kelep-sendang-gile-local": "Medio",
@@ -999,12 +1073,14 @@ const costOverrides = {
   "tropical-bali-descanso": "Gratis",
   "sanur-cena-final": "Medio",
   "sanur-ultimo-paseo": "Gratis",
+  "sanur-final-compras-regalos": "Barato",
 };
 
 const backupPlans = {
   "telaga-waja-rafting-sidemen": "Plan B suave: cooking class en Sidemen o piscina/villa.",
   "sidemen-tour-guide-vida-local": "Plan B suave: paseo corto por arrozales y tarde de villa.",
   "sidemen-trekking-rural": "Plan B suave: cooking class o piscina con vistas en la villa.",
+  "sidemen-textiles-artesania": "Plan B: villa, paseo corto por arrozales o cooking class.",
   "selong-belanak-surf-principiantes": "Plan B suave: Selong Belanak por libre, warungs y baño sin clase.",
   "mawun-tampah-playas": "Plan B suave: playa de Kuta y cena tranquila.",
   "tanjung-aan-bukit-merese": "Plan B suave: playa de Kuta y cena tranquila.",
@@ -1012,10 +1088,13 @@ const backupPlans = {
   "gerupuk-bay-surf-barca": "Plan B suave: Ashtari con vistas o masaje de recuperación.",
   "tiu-kelep-sendang-gile-local": "Plan B suave: paseo por Senaru y warung local.",
   "tiu-kelep-waterfall-selva": "Plan B suave: paseo por Senaru y warung local.",
+  "kuta-lombok-boutiques-mercado": "Plan B: playa, hostel, café en Kuta o cena tranquila.",
   "gili-snorkel-privado": "Plan B suave: snorkel desde Turtle Point y sunset.",
   "blue-marlin-discover-scuba": "Plan B suave: snorkel desde la playa o bici por Gili Air.",
   "manta-dive-gili-air": "Plan B suave: snorkel desde la playa o bici por Gili Air.",
   "gili-air-caballo-sunset-lucrecia": "Plan B: bici por Gili Air, sunset en la playa o masaje.",
+  "gili-night-market": "Plan B: cena en warung recomendado, restaurante de playa o sunset + cena tranquila.",
+  "sanur-final-compras-regalos": "Plan B: Tropical Bali Hotel, piscina, ducha y cena tranquila.",
 };
 
 const authenticityLevels = {
@@ -1026,6 +1105,7 @@ const authenticityLevels = {
   "sidemen-tour-guide-vida-local": "Muy auténtico",
   "sidemen-bali-cooking-class": "Muy auténtico",
   "sidemen-trekking-rural": "Muy auténtico",
+  "sidemen-textiles-artesania": "Muy auténtico",
   "kertha-gosa-ruta-sidemen": "Turístico pero merece la pena",
   "telaga-waja-rafting-sidemen": "No local, pero memorable",
   "selong-belanak-surf-principiantes": "Bonito pero conocido",
@@ -1039,6 +1119,7 @@ const authenticityLevels = {
   "tiga-spies-social": "Muy auténtico para conocer gente joven",
   "authentic-lombok-sasak": "Muy auténtico",
   "sade-traditional-weaving": "Solo si apetece",
+  "kuta-lombok-boutiques-mercado": "Bonito pero conocido",
   "360-gerupuk-surf-barca": "Muy auténtico",
   "gerupuk-bay-surf-barca": "Muy auténtico",
   "gerupuk-bay-visual-guide": "Solo si apetece",
@@ -1052,7 +1133,7 @@ const authenticityLevels = {
   "gili-air-bici-isla": "Muy auténtico",
   "gili-sunset-oeste": "Bonito pero conocido",
   "gili-air-caballo-sunset-lucrecia": "Bonito pero conocido",
-  "gili-night-market": "Muy auténtico",
+  "gili-night-market": "Muy auténtico si hay ambiente local",
   "gili-live-music": "Muy auténtico si hay ambiente esa noche",
   "gili-sunrise-este": "Solo si apetece",
   "gili-yoga-wellness": "Bonito pero conocido",
@@ -1062,6 +1143,7 @@ const authenticityLevels = {
   "tropical-bali-descanso": "Solo si apetece",
   "sanur-cena-final": "Solo si apetece",
   "sanur-ultimo-paseo": "Bonito pero conocido",
+  "sanur-final-compras-regalos": "Bonito pero conocido",
 };
 
 const planImages = {
