@@ -476,6 +476,20 @@ const baseZones = [
         canCombineWith: ["bici", "cena", "live music"],
       },
       {
+        id: "gili-air-caballo-sunset-lucrecia",
+        title: "Paseo a caballo por la playa en Gili Air al sunset",
+        description:
+          "Paseo a caballo de aproximadamente 1 hora por la playa de Gili Air, ideal al atardecer. Es un plan especial para Lucrecia porque monta a caballo, y puede hacerlo sola, con quien quiera apuntarse o como alternativa mientras otros hacen bici, snorkel suave, masaje o sunset.",
+        vibe: "caballos, sunset, playa, especial Lucrecia",
+        link: "https://lombokboat.com/gili-air-horseback-riding/",
+        zone: "Gili Air",
+        bestMoment: "Tarde",
+        duration: "1-2h",
+        priorityType: "relax",
+        bookAhead: true,
+        canCombineWith: ["bici", "snorkel suave", "masaje", "sunset"],
+      },
+      {
         id: "gili-night-market",
         title: "Night Market de Gili Air",
         description:
@@ -852,6 +866,15 @@ const planInsights = {
     similarNote:
       "También hay sunset en Bukit Merese, más panorámico; Gili Air será más de playa y ambiente chill.",
   },
+  "gili-air-caballo-sunset-lucrecia": {
+    mustLevel: "Muy recomendable para Lucrecia",
+    uniqueNote:
+      "Plan bastante especial dentro de la ruta: si Lucrecia quiere montar a caballo, Gili Air al sunset es probablemente el mejor momento.",
+    travelerOpinion:
+      "Suele gustar mucho por la combinación de playa, caballo y atardecer. Mejor revisar bienestar de los caballos antes de reservar.",
+    similarNote:
+      "También existen paseos a caballo en Sanur y otras zonas de Lombok, pero Gili Air al sunset encaja mejor con nuestro viaje.",
+  },
   "gili-night-market": {
     mustLevel: "Muy recomendable",
     uniqueNote: "Plan diferente de noche; no es sustituible por una cena normal de hotel.",
@@ -965,6 +988,7 @@ const costOverrides = {
   "manta-dive-gili-air": "Caro",
   "gili-air-bici-isla": "Barato",
   "gili-sunset-oeste": "Gratis",
+  "gili-air-caballo-sunset-lucrecia": "Medio",
   "gili-night-market": "Barato",
   "gili-live-music": "Barato",
   "gili-sunrise-este": "Gratis",
@@ -991,6 +1015,7 @@ const backupPlans = {
   "gili-snorkel-privado": "Plan B suave: snorkel desde Turtle Point y sunset.",
   "blue-marlin-discover-scuba": "Plan B suave: snorkel desde la playa o bici por Gili Air.",
   "manta-dive-gili-air": "Plan B suave: snorkel desde la playa o bici por Gili Air.",
+  "gili-air-caballo-sunset-lucrecia": "Plan B: bici por Gili Air, sunset en la playa o masaje.",
 };
 
 const authenticityLevels = {
@@ -1026,6 +1051,7 @@ const authenticityLevels = {
   "manta-dive-gili-air": "No local, pero memorable",
   "gili-air-bici-isla": "Muy auténtico",
   "gili-sunset-oeste": "Bonito pero conocido",
+  "gili-air-caballo-sunset-lucrecia": "Bonito pero conocido",
   "gili-night-market": "Muy auténtico",
   "gili-live-music": "Muy auténtico si hay ambiente esa noche",
   "gili-sunrise-este": "Solo si apetece",
@@ -1036,6 +1062,42 @@ const authenticityLevels = {
   "tropical-bali-descanso": "Solo si apetece",
   "sanur-cena-final": "Solo si apetece",
   "sanur-ultimo-paseo": "Bonito pero conocido",
+};
+
+const planImages = {
+  "sanur-beach-walk-atardecer": "/plan-images/plan-02.jpg",
+  "sanur-bicis-beachfront-path": "/plan-images/plan-02.jpg",
+  "little-tree-house-piscina-cena": "/plan-images/plan-01.jpg",
+  "sanur-masaje-balinés-vuelo": "/plan-images/plan-07.jpg",
+  "sidemen-tour-guide-vida-local": "/plan-images/plan-05.jpg",
+  "sidemen-bali-cooking-class": "/plan-images/plan-06.jpg",
+  "sidemen-trekking-rural": "/plan-images/plan-05.jpg",
+  "telaga-waja-rafting-sidemen": "/plan-images/plan-08.jpg",
+  "kertha-gosa-ruta-sidemen": "/plan-images/plan-04.jpg",
+  "selong-belanak-surf-principiantes": "/plan-images/plan-11.jpg",
+  "selong-belanak-libre-warungs": "/plan-images/plan-12.jpg",
+  "mawun-tampah-playas": "/plan-images/plan-13.jpg",
+  "tanjung-aan-bukit-merese": "/plan-images/plan-15.jpg",
+  "mana-eco-retreat-yoga": "/plan-images/plan-14.jpg",
+  "ashtari-comida-yoga-vistas": "/plan-images/plan-25.jpg",
+  "tiga-spies-social": "/plan-images/plan-16.jpg",
+  "authentic-lombok-sasak": "/plan-images/plan-17.jpg",
+  "sade-traditional-weaving": "/plan-images/plan-18.jpg",
+  "360-gerupuk-surf-barca": "/plan-images/plan-24.jpg",
+  "gerupuk-bay-surf-barca": "/plan-images/plan-24.jpg",
+  "tiu-kelep-sendang-gile-local": "/plan-images/plan-27.jpg",
+  "tiu-kelep-waterfall-selva": "/plan-images/plan-27.jpg",
+  "senaru-rinjani-zona": "/plan-images/plan-26.jpg",
+  "gili-snorkel-privado": "/plan-images/plan-30.jpg",
+  "gili-turtle-point-playa": "/plan-images/plan-31.jpg",
+  "blue-marlin-discover-scuba": "/plan-images/plan-33.jpg",
+  "manta-dive-gili-air": "/plan-images/plan-34.jpg",
+  "gili-air-bici-isla": "/plan-images/plan-35.jpg",
+  "gili-sunset-oeste": "/plan-images/plan-39.jpg",
+  "gili-air-caballo-sunset-lucrecia": "/plan-images/plan-43.jpg",
+  "gili-yoga-wellness": "/plan-images/plan-32.jpg",
+  "tropical-bali-descanso": "/plan-images/plan-36.jpg",
+  "sanur-ultimo-paseo": "/plan-images/plan-02.jpg",
 };
 
 function getPlanLogistics(plan) {
@@ -1064,6 +1126,7 @@ export const zones = baseZones.map((zone) => ({
   ...zone,
   plans: zone.plans.map((plan) => ({
     ...plan,
+    image: planImages[plan.id] ?? null,
     ...planInsights[plan.id],
     authenticityLevel: authenticityLevels[plan.id],
     ...getPlanLogistics(plan),

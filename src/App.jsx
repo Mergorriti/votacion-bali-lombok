@@ -120,6 +120,7 @@ function App() {
   const [openAlternatives, setOpenAlternatives] = useState({});
   const [organizerPin, setOrganizerPin] = useState("");
   const [isOrganizerUnlocked, setIsOrganizerUnlocked] = useState(false);
+  const [rankingFilter, setRankingFilter] = useState("Todos");
   const [loading, setLoading] = useState(true);
   const [savingKey, setSavingKey] = useState("");
   const [message, setMessage] = useState("");
@@ -624,6 +625,17 @@ function App() {
 
     return (
       <article className="plan-card" key={`${plan.zoneId}-${plan.id}`}>
+        {plan.image ? (
+          <img
+            className="plan-image"
+            src={plan.image}
+            alt={plan.title}
+            loading="lazy"
+            onError={(event) => {
+              event.currentTarget.style.display = "none";
+            }}
+          />
+        ) : null}
         <div className="plan-topline">
           <div>
             <div className="tag-row">
@@ -878,18 +890,15 @@ function App() {
       ) : null}
 
       {activeView === "ranking" ? (
-        <>
-          <RankingPanel
-            label="Ranking general"
-            title="Planes más votados de todo el viaje"
-            plans={rankedAllPlans}
-            showZone
-          />
-          <MustDoPanel plans={mustDoPlans} />
-          <PeoplePanel plans={enrichedPlans} />
-          <DividedOpinionsPanel plans={enrichedPlans} />
-          <GroupPlansPanel plans={rankedAllPlans} />
-        </>
+        <RankingView
+          commentMap={commentMap}
+          filter={rankingFilter}
+          mustDoPlans={mustDoPlans}
+          onFilterChange={setRankingFilter}
+          plans={enrichedPlans}
+          preferenceMap={preferenceMap}
+          rankedAllPlans={rankedAllPlans}
+        />
       ) : null}
 
       {activeView === "calendar" ? (
@@ -990,6 +999,60 @@ function HomePanel({ onStart }) {
         Empezar a votar
       </button>
     </section>
+  );
+}
+
+function RankingView({
+  commentMap,
+  filter,
+  mustDoPlans,
+  onFilterChange,
+  plans,
+  preferenceMap,
+  rankedAllPlans,
+}) {
+  const filters = ["Todos", ...voters];
+
+  return (
+    <>
+      <section className="results-panel ranking-filter-panel">
+        <p className="section-label">Lo más votado</p>
+        <div className="ranking-tabs" aria-label="Filtro de ranking">
+          {filters.map((option) => (
+            <button
+              className={filter === option ? "ranking-tab active" : "ranking-tab"}
+              key={option}
+              onClick={() => onFilterChange(option)}
+              type="button"
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {filter === "Todos" ? (
+        <>
+          <RankingPanel
+            label="Ranking general"
+            title="Planes más votados de todo el viaje"
+            plans={rankedAllPlans}
+            showZone
+          />
+          <MustDoPanel plans={mustDoPlans} />
+          <PeoplePanel plans={plans} />
+          <DividedOpinionsPanel plans={plans} />
+          <GroupPlansPanel plans={rankedAllPlans} />
+        </>
+      ) : (
+        <PersonRankingPanel
+          commentMap={commentMap}
+          plans={plans}
+          preferenceMap={preferenceMap}
+          voter={filter}
+        />
+      )}
+    </>
   );
 }
 
@@ -1111,6 +1174,100 @@ function PeoplePanel({ plans }) {
         })}
       </div>
     </section>
+  );
+}
+
+function PersonRankingPanel({ commentMap, plans, preferenceMap, voter }) {
+  const votedPlans = plans.filter((plan) => plan.results.byVoter[voter]);
+  const favoritePlans = votedPlans
+    .filter((plan) => plan.results.mustDoByVoter[voter] || plan.results.byVoter[voter] >= 3)
+    .sort(
+      (first, second) =>
+        Number(second.results.mustDoByVoter[voter]) -
+          Number(first.results.mustDoByVoter[voter]) ||
+        second.results.byVoter[voter] - first.results.byVoter[voter] ||
+        scorePlan(second) - scorePlan(first),
+    );
+  const pendingPlans = plans.filter((plan) => !plan.results.byVoter[voter]);
+  const mustCount = plans.filter((plan) => plan.results.mustDoByVoter[voter]).length;
+  const fourCount = plans.filter((plan) => plan.results.byVoter[voter] === 4).length;
+  const threeCount = plans.filter((plan) => plan.results.byVoter[voter] === 3).length;
+
+  return (
+    <>
+      <section className="results-panel">
+        <div className="results-heading">
+          <p className="section-label">Ranking personal</p>
+          <h2>Planes favoritos de {voter}</h2>
+        </div>
+        <div className="person-summary">
+          <span>Sí o sí: {mustCount} planes</span>
+          <span>Votos 4: {fourCount} planes</span>
+          <span>Votos 3: {threeCount} planes</span>
+          <span>Pendientes de votar: {pendingPlans.length} planes</span>
+        </div>
+        <div className="person-ranking-list">
+          {favoritePlans.length ? (
+            favoritePlans.map((plan) => (
+              <PersonPlanItem
+                comment={commentMap[`${voter}-${plan.id}`]}
+                key={`person-${voter}-${plan.id}`}
+                plan={plan}
+                preference={preferenceMap[`${voter}-${plan.id}`]}
+                voter={voter}
+              />
+            ))
+          ) : (
+            <p className="empty-text">Todavía no hay planes favoritos para {voter}.</p>
+          )}
+        </div>
+      </section>
+
+      <section className="results-panel">
+        <div className="results-heading">
+          <p className="section-label">Pendientes de votar</p>
+          <h2>Planes que faltan por revisar</h2>
+        </div>
+        <div className="pending-list">
+          {pendingPlans.length ? (
+            pendingPlans.map((plan) => (
+              <a href={plan.link} key={`pending-${voter}-${plan.id}`} rel="noreferrer" target="_blank">
+                <strong>{plan.title}</strong>
+                <span>{plan.zoneTitle}</span>
+              </a>
+            ))
+          ) : (
+            <p className="empty-text">{voter} ya ha votado todos los planes.</p>
+          )}
+        </div>
+      </section>
+    </>
+  );
+}
+
+function PersonPlanItem({ comment, plan, preference, voter }) {
+  return (
+    <article className="person-plan-card">
+      <div>
+        <strong>{plan.title}</strong>
+        <p>{plan.zoneTitle}</p>
+      </div>
+      <div className="tag-row">
+        <span className="moment-tag">{plan.results.byVoter[voter]}</span>
+        {plan.results.mustDoByVoter[voter] ? (
+          <span className="moment-tag must">Sí o sí</span>
+        ) : null}
+        {preference ? <span className="moment-tag muted">{preference}</span> : null}
+      </div>
+      {comment ? (
+        <p className="person-comment">
+          <strong>Comentario:</strong> {comment}
+        </p>
+      ) : null}
+      <a href={plan.link} target="_blank" rel="noreferrer">
+        Ver plan
+      </a>
+    </article>
   );
 }
 
@@ -1503,6 +1660,8 @@ function CalendarSlot({
   const alternatives = getCompatibleAlternatives(slot.plan, plans);
   const attendees = [];
   const alternativeRows = [];
+  const accordionKey = `${day.id}-${slot.time}-${slot.plan.id}-participants`;
+  const isParticipantsOpen = Boolean(openAlternatives[accordionKey]);
 
   voters.forEach((voter) => {
     const choiceKey = getChoiceKey(voter, day.id, slot.time, slot.plan.id);
@@ -1542,100 +1701,115 @@ function CalendarSlot({
         {slot.plan.bookAhead ? " · Reservar" : ""}
       </p>
 
-      <div className="attendance-panel">
-        <h4>¿Quién se apunta?</h4>
-        {voters.map((voter) => {
-          const choiceKey = getChoiceKey(voter, day.id, slot.time, slot.plan.id);
-          const choice = choices[choiceKey];
-          const isAlternative = choice?.choice_type === "alternative";
-          const shouldShowAlternatives = isAlternative || openAlternatives[choiceKey];
-
-          return (
-            <div className="participant-choice" key={choiceKey}>
-              <div>
-                <strong>{voter}</strong>
-                {isAlternative ? (
-                  <span className="moment-tag individual">Alternativa individual</span>
-                ) : null}
-                {isAlternative && choice.alternative_plan_id ? (
-                  <p>
-                    Alternativa:{" "}
-                    {alternatives.find((plan) => plan.id === choice.alternative_plan_id)?.title ||
-                      plansById[choice.alternative_plan_id]?.title ||
-                      "pendiente"}
-                  </p>
-                ) : (
-                  <p>Plan principal</p>
-                )}
-              </div>
-              <div className="choice-actions">
-                <button
-                  className={!isAlternative ? "choice-button active" : "choice-button"}
-                  disabled={savingKey === choiceKey}
-                  onClick={() => onChoose(day.id, slot.time, slot.plan.id, voter, "main")}
-                  type="button"
-                >
-                  Me apunto al plan principal
-                </button>
-                <button
-                  className={isAlternative ? "choice-button active" : "choice-button"}
-                  onClick={() => onToggleAlternatives(choiceKey)}
-                  type="button"
-                >
-                  Prefiero alternativa
-                </button>
-              </div>
-              {shouldShowAlternatives ? (
-                <div className="alternatives-list">
-                  {alternatives.map((alternative) => (
-                    <button
-                      className={
-                        choice?.alternative_plan_id === alternative.id
-                          ? "alternative-button active"
-                          : "alternative-button"
-                      }
-                      disabled={savingKey === choiceKey}
-                      key={alternative.id}
-                      onClick={() =>
-                        onChoose(
-                          day.id,
-                          slot.time,
-                          slot.plan.id,
-                          voter,
-                          "alternative",
-                          alternative.id,
-                        )
-                      }
-                      type="button"
-                    >
-                      <span className="moment-tag muted">Plan compatible</span>
-                      <strong>{alternative.title}</strong>
-                      <small>
-                        {alternative.bestMoment} · {alternative.duration}
-                        {alternative.bookAhead ? " · Reservar" : ""}
-                      </small>
-                    </button>
-                  ))}
-                </div>
-              ) : null}
-            </div>
-          );
-        })}
-      </div>
-
       <div className="attendance-summary">
-        <p>
-          <strong>Se apuntan:</strong> {attendees.length ? attendees.join(", ") : "Nadie todavía"}
-        </p>
-        <p>
-          <strong>Alternativas:</strong>{" "}
-          {alternativeRows.length
-            ? alternativeRows
-                .map((row) => `${row.voter} → ${row.plan?.title || "alternativa pendiente"}`)
-                .join(", ")
-            : "Sin alternativas elegidas"}
-        </p>
+        {attendees.length === voters.length && alternativeRows.length === 0 ? (
+          <p>Todavía no hay elecciones de participantes.</p>
+        ) : (
+          <>
+            <p>
+              <strong>Se apuntan al plan principal:</strong>{" "}
+              {attendees.length ? attendees.join(", ") : "Nadie todavía"}
+            </p>
+            <p>
+              <strong>Alternativas:</strong>{" "}
+              {alternativeRows.length
+                ? alternativeRows.map((row) => row.voter).join(", ")
+                : "Nadie"}
+            </p>
+          </>
+        )}
       </div>
+
+      <button
+        className="participants-toggle"
+        onClick={() => onToggleAlternatives(accordionKey)}
+        type="button"
+      >
+        {isParticipantsOpen ? "Ocultar quién se apunta y alternativas" : "Ver quién se apunta y alternativas"}
+      </button>
+
+      {isParticipantsOpen ? (
+        <div className="attendance-panel">
+          <h4>¿Quién se apunta?</h4>
+          {voters.map((voter) => {
+            const choiceKey = getChoiceKey(voter, day.id, slot.time, slot.plan.id);
+            const choice = choices[choiceKey];
+            const isAlternative = choice?.choice_type === "alternative";
+            const shouldShowAlternatives = isAlternative || openAlternatives[choiceKey];
+
+            return (
+              <div className="participant-choice" key={choiceKey}>
+                <div>
+                  <strong>{voter}</strong>
+                  {isAlternative ? (
+                    <span className="moment-tag individual">Alternativa individual</span>
+                  ) : null}
+                  {isAlternative && choice.alternative_plan_id ? (
+                    <p>
+                      Alternativa:{" "}
+                      {alternatives.find((plan) => plan.id === choice.alternative_plan_id)?.title ||
+                        plansById[choice.alternative_plan_id]?.title ||
+                        "pendiente"}
+                    </p>
+                  ) : (
+                    <p>Plan principal</p>
+                  )}
+                </div>
+                <div className="choice-actions">
+                  <button
+                    className={!isAlternative ? "choice-button active" : "choice-button"}
+                    disabled={savingKey === choiceKey}
+                    onClick={() => onChoose(day.id, slot.time, slot.plan.id, voter, "main")}
+                    type="button"
+                  >
+                    Me apunto al plan principal
+                  </button>
+                  <button
+                    className={isAlternative ? "choice-button active" : "choice-button"}
+                    onClick={() => onToggleAlternatives(choiceKey)}
+                    type="button"
+                  >
+                    Prefiero alternativa
+                  </button>
+                </div>
+                {shouldShowAlternatives ? (
+                  <div className="alternatives-list">
+                    {alternatives.map((alternative) => (
+                      <button
+                        className={
+                          choice?.alternative_plan_id === alternative.id
+                            ? "alternative-button active"
+                            : "alternative-button"
+                        }
+                        disabled={savingKey === choiceKey}
+                        key={alternative.id}
+                        onClick={() =>
+                          onChoose(
+                            day.id,
+                            slot.time,
+                            slot.plan.id,
+                            voter,
+                            "alternative",
+                            alternative.id,
+                          )
+                        }
+                        type="button"
+                      >
+                        <span className="moment-tag muted">Plan compatible</span>
+                        <strong>{alternative.title}</strong>
+                        <small>
+                          {alternative.bestMoment} · {alternative.duration}
+                          {alternative.bookAhead ? " · Reservar" : ""}
+                        </small>
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+            );
+          })}
+        </div>
+      ) : null}
     </div>
   );
 }

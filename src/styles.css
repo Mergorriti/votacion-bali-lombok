@@ -247,6 +247,16 @@ h1 {
   box-shadow: 0 12px 35px rgba(37, 70, 66, 0.08);
 }
 
+.plan-image {
+  width: 100%;
+  height: 190px;
+  display: block;
+  margin-bottom: 14px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #e8f7f3;
+}
+
 .plan-topline {
   display: grid;
   gap: 12px;
@@ -548,6 +558,38 @@ h1 {
   gap: 10px;
 }
 
+.ranking-filter-panel {
+  padding-bottom: 12px;
+}
+
+.ranking-tabs {
+  display: flex;
+  gap: 8px;
+  margin: 4px -16px 0;
+  padding: 0 16px 4px;
+  overflow-x: auto;
+}
+
+.ranking-tab {
+  flex: 0 0 auto;
+  min-height: 42px;
+  padding: 0 13px;
+  color: #173f3b;
+  background: #fdfbf7;
+  border: 1px solid rgba(15, 118, 110, 0.2);
+  border-radius: 8px;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.ranking-tab.active {
+  color: #ffffff;
+  background: #0f766e;
+  border-color: #0f766e;
+}
+
 .rank-item {
   display: grid;
   grid-template-columns: 38px 1fr;
@@ -653,6 +695,68 @@ h1 {
 .people-grid {
   display: grid;
   gap: 12px;
+}
+
+.person-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.person-summary span {
+  padding: 9px 10px;
+  color: #173f3b;
+  background: #f8f4ee;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+
+.person-ranking-list,
+.pending-list {
+  display: grid;
+  gap: 10px;
+}
+
+.person-plan-card,
+.pending-list a {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  background: #f8f4ee;
+  border-radius: 8px;
+}
+
+.person-plan-card p,
+.pending-list span {
+  margin: 0;
+  color: #50625f;
+  line-height: 1.4;
+}
+
+.person-plan-card > a,
+.pending-list a {
+  color: #0f766e;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.person-plan-card > a {
+  justify-self: start;
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 12px;
+  background: #ffffff;
+  border: 1px solid rgba(15, 118, 110, 0.2);
+  border-radius: 8px;
+}
+
+.person-comment {
+  padding: 9px 10px;
+  background: #eefaf7;
+  border-radius: 8px;
 }
 
 .split-list,
@@ -866,9 +970,11 @@ h1 {
 .attendance-panel {
   display: grid;
   gap: 10px;
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(31, 94, 87, 0.12);
+  margin-top: 8px;
+  padding: 10px;
+  border: 1px solid rgba(31, 94, 87, 0.12);
+  border-radius: 8px;
+  background: #ffffff;
 }
 
 .attendance-panel h4 {
@@ -940,14 +1046,29 @@ h1 {
 
 .attendance-summary {
   display: grid;
-  gap: 6px;
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(31, 94, 87, 0.12);
+  gap: 4px;
+  margin-top: 10px;
+  padding: 9px 10px;
+  color: #50625f;
+  background: #f8f4ee;
+  border-radius: 8px;
 }
 
 .attendance-summary p {
   margin: 0;
+}
+
+.participants-toggle {
+  width: 100%;
+  min-height: 42px;
+  margin-top: 8px;
+  border: 1px solid rgba(15, 118, 110, 0.2);
+  color: #0f766e;
+  background: #f1fcf9;
+  border-radius: 8px;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 900;
 }
 
 @media (min-width: 720px) {
@@ -997,12 +1118,30 @@ h1 {
     align-items: start;
   }
 
+  .plan-image {
+    height: 230px;
+  }
+
   .voter-results {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .people-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .person-summary {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .person-plan-card {
+    grid-template-columns: 1fr auto;
+    align-items: start;
+  }
+
+  .person-plan-card .tag-row,
+  .person-plan-card .person-comment {
+    grid-column: 1 / -1;
   }
 
   .booking-row {
